@@ -1,37 +1,38 @@
-import time
 import cv2
+import time
 from pynput.keyboard import Key, Controller
-
-from capture import init_capture, get_frame, release_capture
-from detection import init_hands, detect_hand, draw_hand_landmarks
-from recognition import is_fist_closed
+from core import detection, capture, recognition
 
 def main():
     # Inicializar componentes
-    cap = init_capture()
-    hands = init_hands()
+    cap = capture.init_capture()
+    hands = detection.init_hands()
     keyboard = Controller()
 
     # Variables para controlar la simulación de tecla
     last_press_time = 0
-    cooldown = 0.5  # Segundos entre presiones
+    cooldown = 0.01  # Segundos entre presiones
+    last_landmarks = None
 
     print("Presiona 'q' en la ventana de video para salir.")
 
     try:
         while True:
-            frame = get_frame(cap)
+            frame = capture.get_frame(cap)
             if frame is None:
                 break
 
-            # Detectar mano
-            landmarks = detect_hand(frame, hands)
+            # Voltear el frame horizontalmente para efecto espejo
+            frame = cv2.flip(frame, 1)
 
-            # Dibujar landmarks (opcional)
-            draw_hand_landmarks(frame, landmarks)
+            # Detectar mano cada frame
+            last_landmarks = detection.detect_hand(frame, hands)
 
-            # Verificar si el puño está cerrado
-            if is_fist_closed(landmarks):
+            # Dibujar landmarks (opcional) usando los últimos landmarks detectados
+            detection.draw_hand_landmarks(frame, last_landmarks)
+
+            # Verificar si el gesto de contacto pulgar-índice está activo usando los últimos landmarks
+            if recognition.is_thumb_index_contact_gesture(last_landmarks):
                 current_time = time.time()
                 if current_time - last_press_time > cooldown:
                     keyboard.press(Key.space)
@@ -39,8 +40,11 @@ def main():
                     last_press_time = current_time
                     print("Tecla 'espacio' presionada")
 
+            # Redimensionar el frame para reducir el tamaño de la ventana
+            display_frame = cv2.resize(frame, (400, 400)) # Ancho, Alto
+
             # Mostrar frame
-            cv2.imshow('Hand Detection', frame)
+            cv2.imshow('Hand Detection', display_frame)
 
             # Salir con 'q'
             if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -51,7 +55,7 @@ def main():
 
     finally:
         # Liberar recursos
-        release_capture(cap)
+        capture.release_capture(cap)
         cv2.destroyAllWindows()
         print("Recursos liberados")
 
