@@ -3,34 +3,34 @@ import cv2
 import time
 from core import detection, recognition
 from .components import charts, stats_panel
+from pynput.keyboard import Key, Controller
 from PySide6.QtCore import QTimer, Qt
 from PySide6.QtGui import QPixmap, QImage, QIcon
-from pynput.keyboard import Key, Controller
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QHBoxLayout, QSpacerItem, QSizePolicy
+from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QHBoxLayout
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Control de Gestos")
         self.setWindowIcon(QIcon("app/assets/geometry-dash-icon-240px.png"))
-        self.setGeometry(100, 100, 1440, 900)  # Tamaño de la ventana
+        self.resize(1080, 720)  # Establecer tamaño inicial
 
         # Inicializar detector de manos y controlador de teclado
         self.hands = detection.init_hands()
         self.keyboard = Controller()
 
         # Variables principales para estadísticas y control
-        self.gesture_count = 0  # Contador de gestos detectados
-        self.last_press_time = 0  # Timestamp del último clic
-        self.cooldown = 0.1  # Tiempo mínimo entre clicks (segundos)
-        self.cap = None  # Captura de video
-        self.running = False  # Estado de la detección
-        self.click_timestamps = []  # Lista de timestamps de clicks
-        self.session_start = time.time()  # Inicio de la sesión
-        self.time_with_gestures = 0  # Tiempo acumulado con gestos
-        self.time_without_gestures = 0  # Tiempo acumulado sin gestos
-        self.clicks_per_minute = [0] * 10  # Clicks por cada minuto (últimos 10)
-        self.clicks_per_hour = [0] * 5  # Clicks por cada hora (próximas 5)
+        self.gesture_count = 0 # Contador de gestos detectados
+        self.last_press_time = 0 # Timestamp del último clic
+        self.cooldown = 0.1 # Tiempo mínimo entre clicks (segundos)
+        self.cap = None # Captura de video
+        self.running = False # Estado de la detección
+        self.click_timestamps = [] # Lista de timestamps de clicks
+        self.session_start = time.time() # Inicio de la sesión
+        self.time_with_gestures = 0 # Tiempo acumulado con gestos
+        self.time_without_gestures = 0 # Tiempo acumulado sin gestos
+        self.clicks_per_minute = [0] * 10 # Clicks por cada minuto (últimos 10)
+        self.clicks_per_hour = [0] * 5 # Clicks por cada hora (próximas 5)
 
         # Layout principal dividido en izquierda y derecha
         layout = QHBoxLayout()
@@ -86,8 +86,8 @@ class MainWindow(QWidget):
 
         self.setLayout(layout)
 
-        # Establecer color de fondo blanco
-        self.setStyleSheet("background-color: #008080;")
+        # Establecer degradado de fondo
+        self.setStyleSheet("background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #006064, stop: 1 #299ea4);");
 
         # Timer for updating video
         self.timer = QTimer()
@@ -189,6 +189,15 @@ class MainWindow(QWidget):
         self.activity_chart.update_data(self.time_with_gestures, self.time_without_gestures)
         self.clicks_per_minute_chart.update_data(self.clicks_per_minute)
         self.clicks_line_chart.update_data(self.clicks_per_hour)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+        # Recalcular y mover la ventana al centro de la pantalla
+        app = QApplication.instance()
+        screen = app.primaryScreen().availableGeometry()
+        x = (screen.width() - self.width()) // 2
+        y = (screen.height() - self.height()) // 2
+        self.move(x, y)
 
     def closeEvent(self, event):
         self.running = False

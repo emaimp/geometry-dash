@@ -20,8 +20,12 @@ protobuf==4.25.8
 pycparser==2.23
 pynput==1.8.1
 pyparsing==3.2.5
+PySide6==6.10.0
+PySide6_Addons==6.10.0
+PySide6_Essentials==6.10.0
 python-dateutil==2.9.0.post0
 scipy==1.15.3
 sentencepiece==0.2.1
+shiboken6==6.10.0
 six==1.17.0
 sounddevice==0.5.3

@@ -20,7 +20,7 @@ def is_thumb_index_contact_gesture(landmarks):
     threshold_contact = 0.10
 
     # Umbral para asegurar que el resto de los dedos no están en contacto con el pulgar
-    threshold_no_contact = 0.20 # Debe ser mayor para evitar falsos positivos
+    threshold_no_contact = 0.15 # Debe ser mayor para evitar falsos positivos
 
     # Verificar contacto entre pulgar e índice
     thumb_index_close = distance(thumb_tip, index_tip) < threshold_contact

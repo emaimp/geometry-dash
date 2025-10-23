@@ -9,16 +9,16 @@ class StatsPanel(QWidget):
         self.stats_groupbox.setStyleSheet("""
             QGroupBox {
                 font-weight: bold;
-                border: 2px solid #000000;
+                border: 2px solid #ffffff;
                 border-radius: 5px;
                 margin-top: 1ex;
-                background-color: #008080;
+                background-color: #006064;
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
                 left: 10px;
                 padding: 0 5px 0 5px;
-                color: #000000;
+                color: #ffffff;
             }
         """)
         stats_layout = QVBoxLayout()
