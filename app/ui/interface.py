@@ -4,16 +4,16 @@ import time
 from core import detection, recognition
 from .components import charts, stats_panel
 from pynput.keyboard import Key, Controller
-from PySide6.QtCore import QTimer, Qt
-from PySide6.QtGui import QPixmap, QImage, QIcon
+from PySide6.QtCore import QTimer, Qt, QSize
+from PySide6.QtGui import QPixmap, QImage, QIcon, QMovie
 from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QHBoxLayout
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Control de Gestos")
-        self.setWindowIcon(QIcon("app/assets/geometry-dash-icon-240px.png"))
-        self.resize(1080, 720)  # Establecer tamaño inicial
+        self.setWindowIcon(QIcon("app/assets/geometry-dash-icon-150px.png"))
+        self.resize(1440, 900)  # Establecer tamaño inicial
 
         # Inicializar detector de manos y controlador de teclado
         self.hands = detection.init_hands()
@@ -40,7 +40,8 @@ class MainWindow(QWidget):
 
         # Video label
         self.video_label = QLabel(self)
-        self.video_label.setFixedSize(640, 480)
+        self.video_label.setFixedSize(550, 450)
+        self.video_label.setStyleSheet("border: 2px solid white;")
         left_layout.addWidget(self.video_label)
 
         # Panel de estadísticas
@@ -63,7 +64,10 @@ class MainWindow(QWidget):
 
         # Icon label
         self.icon_label = QLabel()
-        self.icon_label.setPixmap(QPixmap("app/assets/geometry-dash-icon-240px.png"))
+        self.icon_movie = QMovie("app/assets/geometry-dash-animated.gif")
+        self.icon_movie.setScaledSize(QSize(325, 163))
+        self.icon_label.setMovie(self.icon_movie)
+        self.icon_movie.start()
         self.icon_label.setAlignment(Qt.AlignCenter)
 
         # Icon between charts
@@ -87,7 +91,7 @@ class MainWindow(QWidget):
         self.setLayout(layout)
 
         # Establecer degradado de fondo
-        self.setStyleSheet("background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #006064, stop: 1 #299ea4);");
+        self.setStyleSheet("background: #202020;");
 
         # Timer for updating video
         self.timer = QTimer()
