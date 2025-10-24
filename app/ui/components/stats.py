@@ -12,33 +12,36 @@ class StatsPanel(QWidget):
 
         # Crear layout vertical principal para organizar los elementos
         self.main_layout = QVBoxLayout(self)
+        self.main_layout.setContentsMargins(0, 0, 0, 0) # Pequeño margen para las sombras
 
         # Crear layout horizontal para la primera fila de contadores
         counters_layout = QHBoxLayout()
+        counters_layout.setSpacing(5) # Espaciado entre elementos en la fila de contadores
         # Agregar el layout de contadores al layout principal
         self.main_layout.addLayout(counters_layout)
 
         # Crear contenedor widget para el contador de gestos detectados
         self.counter_container = QWidget()
-        # Configurar estilo CSS para el contenedor con borde redondeado y padding
+        # Deshabilitar el fondo automático del QWidget
+        self.counter_container.setAutoFillBackground(False)
+        # Configurar estilo CSS para el contenedor con degradado y borde redondeado
         self.counter_container.setStyleSheet("""
             QWidget {
-                border-radius: 3px;
-                padding: 5px;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b);
+                border: 2px solid #000000;
             }
         """)
         # Crear layout vertical para el contenedor del contador
         counter_layout = QVBoxLayout(self.counter_container)
+        counter_layout.setContentsMargins(0, 0, 0, 0) # Eliminar márgenes del layout interno
+        counter_layout.setSpacing(0) # Eliminar espaciado del layout interno
         # Crear label para mostrar el contador de gestos con texto inicial
         self.counter_label = QLabel("Gestos Detectados: 0", self.counter_container)
         # Aplicar estilo CSS con gradiente azul para el label
         self.counter_label.setStyleSheet("""
             QLabel {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #065a80, stop:1 #0f233d);
-                border-radius: 3px;
-                padding: 5px;
+                background: transparent;
                 color: #ffffff;
-                font-weight: bold;
                 font-size: 16px;
                 qproperty-alignment: AlignCenter;
             }
@@ -50,25 +53,26 @@ class StatsPanel(QWidget):
 
         # Crear contenedor widget para el contador de clicks totales
         self.total_container = QWidget()
-        # Configurar estilo CSS idéntico para consistencia visual
+        # Deshabilitar el fondo automático del QWidget
+        self.total_container.setAutoFillBackground(False)
+        # Configurar estilo CSS para el contenedor con degradado y borde redondeado
         self.total_container.setStyleSheet("""
             QWidget {
-                border-radius: 3px;
-                padding: 5px;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b);
+                border: 2px solid #000000;
             }
         """)
         # Crear layout vertical para el contenedor de clicks totales
         total_layout = QVBoxLayout(self.total_container)
+        total_layout.setContentsMargins(0, 0, 0, 0) # Eliminar márgenes del layout interno
+        total_layout.setSpacing(0) # Eliminar espaciado del layout interno
         # Crear label para mostrar clicks totales con texto inicial
         self.total_label = QLabel("Clicks Totales: 0", self.total_container)
         # Aplicar el mismo estilo CSS de gradiente azul
         self.total_label.setStyleSheet("""
             QLabel {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #065a80, stop:1 #0f233d);
-                border-radius: 3px;
-                padding: 5px;
+                background: transparent;
                 color: #ffffff;
-                font-weight: bold;
                 font-size: 16px;
                 qproperty-alignment: AlignCenter;
             }
@@ -80,30 +84,32 @@ class StatsPanel(QWidget):
 
         # Crear layout horizontal para la segunda fila de tiempos
         times_layout = QHBoxLayout()
+        times_layout.setSpacing(5) # Espaciado entre elementos en la fila de tiempos
         # Agregar el layout de tiempos al layout principal
         self.main_layout.addLayout(times_layout)
 
         # Crear contenedor para el tiempo promedio entre gestos
         self.avg_container = QWidget()
-        # Aplicar estilo CSS consistente para el contenedor
+        # Deshabilitar el fondo automático del QWidget
+        self.avg_container.setAutoFillBackground(False)
+        # Aplicar estilo CSS para el contenedor con degradado y borde redondeado
         self.avg_container.setStyleSheet("""
             QWidget {
-                border-radius: 3px;
-                padding: 5px;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b);
+                border: 2px solid #000000;
             }
         """)
         # Crear layout vertical para el contenedor de tiempo promedio
         avg_layout = QVBoxLayout(self.avg_container)
+        avg_layout.setContentsMargins(0, 0, 0, 0) # Eliminar márgenes del layout interno
+        avg_layout.setSpacing(0) # Eliminar espaciado del layout interno
         # Crear label para mostrar tiempo promedio con valor inicial
         self.avg_label = QLabel("Tiempo Promedio: 0.00s", self.avg_container)
         # Aplicar estilo CSS de gradiente azul para el label
         self.avg_label.setStyleSheet("""
             QLabel {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #065a80, stop:1 #0f233d);
-                border-radius: 3px;
-                padding: 5px;
+                background: transparent;
                 color: #ffffff;
-                font-weight: bold;
                 font-size: 16px;
                 qproperty-alignment: AlignCenter;
             }
@@ -115,25 +121,26 @@ class StatsPanel(QWidget):
 
         # Crear contenedor para mostrar tiempo mínimo y máximo entre gestos
         self.min_max_container = QWidget()
-        # Configurar estilo CSS idéntico para consistencia
+        # Deshabilitar el fondo automático del QWidget
+        self.min_max_container.setAutoFillBackground(False)
+        # Configurar estilo CSS para el contenedor con degradado y borde redondeado
         self.min_max_container.setStyleSheet("""
             QWidget {
-                border-radius: 3px;
-                padding: 5px;
+                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b);
+                border: 2px solid #000000;
             }
         """)
         # Crear layout vertical para el contenedor min/max
         min_max_layout = QVBoxLayout(self.min_max_container)
+        min_max_layout.setContentsMargins(0, 0, 0, 0) # Eliminar márgenes del layout interno
+        min_max_layout.setSpacing(0) # Eliminar espaciado del layout interno
         # Crear label para mostrar min/max con valores iniciales
         self.min_max_label = QLabel("Min/Max: 0.00s / 0.00s", self.min_max_container)
         # Aplicar estilo CSS de gradiente azul
         self.min_max_label.setStyleSheet("""
             QLabel {
-                background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #065a80, stop:1 #0f233d);
-                border-radius: 3px;
-                padding: 5px;
+                background: transparent;
                 color: #ffffff;
-                font-weight: bold;
                 font-size: 16px;
                 qproperty-alignment: AlignCenter;
             }
@@ -197,11 +204,8 @@ class StatsPanel(QWidget):
             # Aplicar estilo de resaltado con fondo amarillo verde y texto negro
             highlighted_style = """
             QLabel {
-                background-color: #c7e85b;
-                border-radius: 3px;
-                padding: 5px;
+                background-color: #00ffff;
                 color: #000000;
-                font-weight: bold;
                 font-size: 16px;
                 qproperty-alignment: AlignCenter;
             }

@@ -1,5 +1,6 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QColor, QPainter
+from PySide6.QtGui import QColor, QPainter, QBrush
+from PySide6.QtWidgets import QGraphicsDropShadowEffect
 from PySide6.QtCharts import QChart, QChartView, QPieSeries, QBarSeries, QBarSet, QBarCategoryAxis, QValueAxis, QLineSeries
 
 class AccuracyChart(QChartView):
@@ -14,12 +15,22 @@ class AccuracyChart(QChartView):
         chart = QChart() # Crear un objeto QChart para contener la serie y configuraciones
         chart.addSeries(self.series) # Agregar la serie de torta al gráfico
         chart.setTitle("Precisión de Detección")
-        chart.setTheme(QChart.ChartThemeBlueCerulean)
-        chart.setAnimationOptions(QChart.NoAnimation) # Deshabilitar animaciones para un rendimiento más rápido
+        chart.setTitleBrush(QBrush(QColor(Qt.white))) # Establecer el color del título a blanco
+        chart.setAnimationOptions(QChart.NoAnimation) # Animaciones
         chart.legend().setVisible(True) # Hacer visible la leyenda del gráfico
         chart.legend().setAlignment(Qt.AlignBottom) # Alinear la leyenda en la parte inferior del gráfico
+        chart.legend().setLabelColor(QColor(Qt.white)) # Establecer el color de las etiquetas de la leyenda a blanco
+        chart.setBackgroundVisible(False) # Asegurar que el fondo del gráfico sea transparente
 
         self.setChart(chart) # Asignar el gráfico configurado a la vista
+        self.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b)")
+
+        # Configurar y aplicar el efecto de sombra
+        shadow_effect = QGraphicsDropShadowEffect(self)
+        shadow_effect.setBlurRadius(3) # Radio de desenfoque de la sombra
+        shadow_effect.setColor(QColor(0, 0, 0, 150)) # Color de la sombra
+        shadow_effect.setOffset(3, 3) # Desplazamiento de la sombra (x, y)
+        self.setGraphicsEffect(shadow_effect) # Aplicar el efecto al QChartView
 
     def update_data(self, gestures_detected, clicks_performed):
         # Método para actualizar los datos del gráfico de torta
@@ -33,12 +44,13 @@ class AccuracyChart(QChartView):
             # Agregar segmento para clicks realizados
             slice_clicks = self.series.append("Clicks Realizados", clicks_performed)
             slice_clicks.setLabelVisible(False) # Ocultar la etiqueta del segmento
-            slice_clicks.setColor(QColor("#ff0000"))
+            slice_clicks.setColor(QColor("#00ffff"))
         else:
             # Si no hay datos, mostrar un segmento de "Sin Datos"
             slice_no_data = self.series.append("Sin Datos", 1)
             slice_no_data.setLabelVisible(False) # Ocultar la etiqueta
-            slice_no_data.setColor(QColor("#ffd700"))
+            slice_no_data.setColor(QColor("#1c1c1c"))
+
 class ActivityTimeChart(QChartView):
     # Gráfico de torta para tiempo de sesión con/sin gestos
     def __init__(self):
@@ -49,12 +61,23 @@ class ActivityTimeChart(QChartView):
         chart = QChart() # Crear el gráfico
         chart.addSeries(self.series) # Agregar la serie al gráfico
         chart.setTitle("Tiempo de Sesión por Actividad")
-        chart.setTheme(QChart.ChartThemeBlueCerulean)
-        chart.setAnimationOptions(QChart.NoAnimation) # Deshabilitar animaciones
+        chart.setTitleBrush(QBrush(QColor(Qt.white))) # Establecer el color del título a blanco
+        chart.setAnimationOptions(QChart.NoAnimation) # Animaciones
         chart.legend().setVisible(True) # Hacer visible la leyenda
         chart.legend().setAlignment(Qt.AlignBottom) # Alinear la leyenda en la parte inferior
+        chart.legend().setLabelColor(QColor(Qt.white)) # Establecer el color de las etiquetas de la leyenda a blanco
+
+        chart.setBackgroundVisible(False) # Asegurar que el fondo del gráfico sea transparente
 
         self.setChart(chart) # Asignar el gráfico a la vista
+        self.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b)")
+
+        # Configurar y aplicar el efecto de sombra
+        shadow_effect = QGraphicsDropShadowEffect(self)
+        shadow_effect.setBlurRadius(3) # Radio de desenfoque de la sombra
+        shadow_effect.setColor(QColor(0, 0, 0, 150)) # Color de la sombra
+        shadow_effect.setOffset(3, 3) # Desplazamiento de la sombra (x, y)
+        self.setGraphicsEffect(shadow_effect) # Aplicar el efecto al QChartView
 
     def update_data(self, time_with_gestures, time_without_gestures):
         # Método para actualizar los datos del gráfico de tiempo de sesión
@@ -64,22 +87,22 @@ class ActivityTimeChart(QChartView):
             # Agregar segmento para tiempo con gestos
             slice_with = self.series.append("Tiempo con Gestos", time_with_gestures)
             slice_with.setLabelVisible(False) # Ocultar etiqueta
-            slice_with.setColor(QColor("#007cff"))
+            slice_with.setColor(QColor("#00ffff"))
             # Agregar segmento para tiempo sin gestos
             slice_without = self.series.append("Tiempo sin Gestos", time_without_gestures)
             slice_without.setLabelVisible(False) # Ocultar etiqueta
-            slice_without.setColor(QColor("#ff0000"))
+            slice_without.setColor(QColor("#007cff"))
         else:
             slice_no_data = self.series.append("Sin Datos", 1)
             slice_no_data.setLabelVisible(False) # Ocultar etiqueta
-            slice_no_data.setColor(QColor("#ffd700"))
+            slice_no_data.setColor(QColor("#1c1c1c"))
 
 class ClicksPerMinuteChart(QChartView):
     # Gráfico de barras para clicks por minuto (últimos 10 min)
     def __init__(self):
         super().__init__()
         self.bar_set = QBarSet("Clicks") # Crear conjunto de barras con nombre "Clicks"
-        self.bar_set.setColor(QColor("#007cff"))
+        self.bar_set.setColor(QColor("#00ffff")) # Establecer el color de las barras
         self.series = QBarSeries() # Crear serie de barras y agregar el conjunto
         self.series.append(self.bar_set)
 
@@ -90,20 +113,33 @@ class ClicksPerMinuteChart(QChartView):
         chart = QChart() # Crear el gráfico
         chart.addSeries(self.series) # Agregar la serie de barras al gráfico
         chart.setTitle("Clicks por Minuto (Últimos 10 min)")
-        chart.setTheme(QChart.ChartThemeBlueCerulean)
-        chart.setAnimationOptions(QChart.AllAnimations) # Habilitar todas las animaciones para transiciones suaves
+        chart.setTitleBrush(QBrush(QColor(Qt.white))) # Establecer el color del título a blanco
+        chart.setAnimationOptions(QChart.NoAnimation) # Animaciones
+        chart.legend().setLabelColor(QColor(Qt.white)) # Establecer el color de las etiquetas de la leyenda a blanco
 
         axis_x = QBarCategoryAxis() # Crear eje X categórico para las barras
         axis_x.append(self.categories) # Agregar las categorías de minutos
         chart.addAxis(axis_x, Qt.AlignBottom) # Adjuntar eje X al gráfico y a la serie
         self.series.attachAxis(axis_x)
+        axis_x.setLabelsColor(QColor(Qt.white)) # Establecer el color de las etiquetas del eje X a blanco
 
         self.axis_y = QValueAxis() # Crear eje Y de valores con rango inicial 0-1000
         self.axis_y.setRange(0, 1000)
         chart.addAxis(self.axis_y, Qt.AlignLeft) # Adjuntar eje Y al gráfico y a la serie
         self.series.attachAxis(self.axis_y)
+        self.axis_y.setLabelsColor(QColor(Qt.white)) # Establecer el color de las etiquetas del eje Y a blanco
+
+        chart.setBackgroundVisible(False) # Asegurar que el fondo del gráfico sea transparente
 
         self.setChart(chart) # Asignar el gráfico a la vista
+        self.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b)")
+
+        # Configurar y aplicar el efecto de sombra
+        shadow_effect = QGraphicsDropShadowEffect(self)
+        shadow_effect.setBlurRadius(3) # Radio de desenfoque de la sombra
+        shadow_effect.setColor(QColor(0, 0, 0, 150)) # Color de la sombra
+        shadow_effect.setOffset(3, 3) # Desplazamiento de la sombra (x, y)
+        self.setGraphicsEffect(shadow_effect) # Aplicar el efecto al QChartView
 
     def update_data(self, clicks_per_minute_list):
         # Método para actualizar los datos del gráfico de barras
@@ -119,8 +155,8 @@ class ClicksLineChart(QChartView):
     def __init__(self):
         super().__init__()
         self.series = QLineSeries() # Crear serie de líneas con nombre
-        self.series.setName("Clicks por Hora")
-        self.series.setColor(QColor("#007cff"))
+        self.series.setName("Clicks")
+        self.series.setColor(QColor("#00ffff")) # Establecer el color de la línea
         self.series.setPointsVisible(True) # Hacer visibles los puntos en la línea
 
         for i in range(5): # Inicializar con 5 puntos en cero (para las próximas 5 horas)
@@ -129,21 +165,34 @@ class ClicksLineChart(QChartView):
         chart = QChart() # Crear el gráfico
         chart.addSeries(self.series) # Agregar la serie de líneas
         chart.setTitle("Clicks por Hora (Próximas 5 horas)")
-        chart.setTheme(QChart.ChartThemeBlueCerulean)
-        chart.setAnimationOptions(QChart.AllAnimations) # Habilitar animaciones
+        chart.setTitleBrush(QBrush(QColor(Qt.white))) # Establecer el color del título a blanco
+        chart.setAnimationOptions(QChart.NoAnimation) # Animaciones
+        chart.legend().setLabelColor(QColor(Qt.white)) # Establecer el color de las etiquetas de la leyenda a blanco
 
         axis_x = QValueAxis() # Crear eje X de valores con rango 0-4 (para horas 0 a 4)
         axis_x.setRange(0, 4)
         axis_x.setLabelFormat("%d") # Formato de etiqueta como entero
         chart.addAxis(axis_x, Qt.AlignBottom) # Adjuntar eje X
         self.series.attachAxis(axis_x)
+        axis_x.setLabelsColor(QColor(Qt.white)) # Establecer el color de las etiquetas del eje X a blanco
 
         self.axis_y = QValueAxis() # Crear eje Y con rango inicial 0-10000 (más alto para horas)
         self.axis_y.setRange(0, 10000)
         chart.addAxis(self.axis_y, Qt.AlignLeft) # Adjuntar eje Y
         self.series.attachAxis(self.axis_y)
+        self.axis_y.setLabelsColor(QColor(Qt.white)) # Establecer el color de las etiquetas del eje Y a blanco
+
+        chart.setBackgroundVisible(False) # Asegurar que el fondo del gráfico sea transparente
 
         self.setChart(chart) # Asignar gráfico a la vista
+        self.setStyleSheet("background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #2c6eb0, stop:1 #0e294b)")
+
+        # Configurar y aplicar el efecto de sombra
+        shadow_effect = QGraphicsDropShadowEffect(self)
+        shadow_effect.setBlurRadius(3) # Radio de desenfoque de la sombra
+        shadow_effect.setColor(QColor(0, 0, 0, 150)) # Color de la sombra
+        shadow_effect.setOffset(3, 3) # Desplazamiento de la sombra (x, y)
+        self.setGraphicsEffect(shadow_effect) # Aplicar el efecto al QChartView
 
     def update_data(self, clicks_per_hour_list):
         # Método para actualizar los datos del gráfico de líneas

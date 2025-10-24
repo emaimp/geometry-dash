@@ -17,7 +17,7 @@ class MainWindow(QWidget):
         super().__init__()
         self.setWindowTitle("Control de Gestos")
         self.setWindowIcon(QIcon("app/assets/geometry-dash-icon-150px.png"))
-        self.setStyleSheet("background: #ffffff;");
+        self.setStyleSheet("background: #f4f4f4;");
         self.resize(1440, 900)
 
         # Inicializar el detector de manos utilizando el módulo detection
@@ -48,7 +48,7 @@ class MainWindow(QWidget):
 
         self.video_label = QLabel(self) # Label para mostrar el video de la webcam
         self.video_label.setFixedSize(550, 450)
-        self.video_label.setStyleSheet("border: 2px solid #ffffff;")
+        # self.video_label.setStyleSheet("border: 2px solid #ffffff;")
         left_layout.addWidget(self.video_label) # Agregar el label de video al layout izquierdo
 
         # Panel de estadísticas que muestra conteo de gestos y estadísticas
@@ -63,6 +63,7 @@ class MainWindow(QWidget):
 
         #--- Layout horizontal para los gráficos superiores ---#
         top_charts_layout = QHBoxLayout()
+        top_charts_layout.setSpacing(10) # Espaciado entre elementos en la fila de gráficos superiores
 
         # Gráfico de precisión (accuracy) de gestos detectados vs. clicks
         self.accuracy_chart = charts.AccuracyChart()
@@ -81,9 +82,8 @@ class MainWindow(QWidget):
         Icono animado de Geometry Dash        
         """
         self.icon_label = QLabel()
-
-        self.icon_movie = QMovie("app/assets/geometry-dash-animated.gif") # Cargar el archivo GIF animado
-        self.icon_movie.setScaledSize(QSize(325, 163)) # Ajustar el tamaño del GIF animado
+        self.icon_movie = QMovie("app/assets/geometry-dash-animated.gif") # Cargar el archivo GIF
+        self.icon_movie.setScaledSize(QSize(325, 163)) # Ajustar el tamaño del GIF
 
         # Asignar el GIF al label
         self.icon_label.setMovie(self.icon_movie)
@@ -97,6 +97,7 @@ class MainWindow(QWidget):
 
         #--- Layout horizontal para los gráficos inferiores ---#
         bottom_charts_layout = QHBoxLayout()
+        bottom_charts_layout.setSpacing(10) # Espaciado entre elementos en la fila de gráficos inferiores
 
         # Gráfico de barras para clicks por minuto (últimos 10 minutos)
         self.clicks_per_minute_chart = charts.ClicksPerMinuteChart()
