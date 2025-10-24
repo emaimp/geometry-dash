@@ -1,5 +1,5 @@
 """
-Determina si se realiza el gesto de contactar pulgar e índice.
+Determina si se realiza el gesto de contactar pulgar e índice
 """
 def is_thumb_index_contact_gesture(landmarks):
     if not landmarks:

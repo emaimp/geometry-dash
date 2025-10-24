@@ -1,7 +1,7 @@
 import cv2
 
 """
-Inicializa la captura de video desde la webcam.
+Inicializa la captura de video desde la webcam
 """
 def init_capture():
     cap = cv2.VideoCapture(0) # 0 para la webcam predeterminada
@@ -10,7 +10,7 @@ def init_capture():
     return cap
 
 """
-Obtiene un frame de la captura de video.
+Obtiene un frame de la captura de video
 """
 def get_frame(cap):
     ret, frame = cap.read()
@@ -19,7 +19,7 @@ def get_frame(cap):
     return frame
 
 """
-Libera la captura de video.
+Libera la captura de video
 """
 def release_capture(cap):
     cap.release()
